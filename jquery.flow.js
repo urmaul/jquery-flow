@@ -1,10 +1,27 @@
-jQuery.fn.flow = (function() {
+jQuery.flow = (function() {
     var $ = jQuery;
     
     var els = [];
     
+    var flow = {};
+    
+    var getInt = function(value, defval, map) {
+        if (isNaN(value)) {
+            if (map && map[value] !== undefined)
+                return map[value];
+            
+            return 0;
+            
+        } else
+            return parseInt(value);
+    };
+    
     var addElement = function (el, params) {
-        var $el = $(el);
+        var $el = el instanceof jQuery ? el : $(el);
+        
+        if ($el.length == 0)
+            return;
+        
         var vars = {
             el: $el,
             height: $el.height
@@ -14,24 +31,44 @@ jQuery.fn.flow = (function() {
             params = {};
         
         params = $.extend({
-            'screen-margin': 0,
+            screenMargin: 0,
             margin: 0
         }, params);
         
+        // position
         if ($.inArray(params.position, ['top', 'center', 'bottom']) == -1)
             params.position = 'top';
-        
-        if (params.parent !== undefined)
-            vars.parent = $(params.parent) .first();
-        else
-            vars.parent = $el .parent();
-        
         vars.position = params.position;
-        vars.screenMargin = params['screen-margin'];
-        vars.margin = params.margin;
-        vars.height = $el .height();
-        vars.parentTop = vars.parent .offset() .top;
-        vars.parentBottom = vars.parentTop + vars.parent .height();
+        
+        // minTop
+        vars.minTop = getInt(params.minTop, 0, {current: $el .offset() .top});
+        
+        // parent
+        var $parent;
+        if (params.parent !== undefined)
+            $parent = $(params.parent) .first();
+        else
+            $parent = $el .parent();
+        vars.parent = $parent;
+        
+        // sizes
+        var onResizeElement = function() {
+            vars.height = $el .height();
+        };
+        var onResizeParent = function() {
+            vars.parentTop = $parent .offset() .top;
+            vars.parentBottom = vars.parentTop + $parent .height();
+        };
+        onResizeElement();
+        onResizeParent();
+        
+        $el     .resize(onResizeElement);
+        $parent .resize(onResizeParent);
+        
+        // margins
+        vars.screenMargin = getInt(params.screenMargin, 0);
+        vars.margin = getInt(params.margin, 0);
+        
         
         $el .css({
             display: 'block',
@@ -76,7 +113,7 @@ jQuery.fn.flow = (function() {
             }
             
             newTop = Math.min(newTop, bottomEdge - el.height);
-            newTop = Math.max(newTop, el.parentTop + el.margin);
+            newTop = Math.max(newTop, el.parentTop + el.margin, el.minTop);
             
             el.el.css({top: newTop});
         }
@@ -90,8 +127,9 @@ jQuery.fn.flow = (function() {
             .resize(recalcFlow);
         
         $('[data-flow]') .each(function(){
+            var $this = $(this);
             var params = {};
-            $.each($(this) .data('flow') .split(','), function(i, param){
+            $.each($this .data('flow') .split(','), function(i, param){
                 param = param.split('=');
                 if (param.length == 2) {
                     params[param[0]] = /^\d+$/.test(param[1]) ? parseInt(param[1], 10) : param[1];
@@ -104,7 +142,9 @@ jQuery.fn.flow = (function() {
         recalcFlow();
     });
     
-    return {
+    $.extend(flow, {
         addElement: addElement
-    };
+    });
+    
+    return flow;
 })();
