@@ -22,6 +22,13 @@ jQuery.flow = (function() {
         if ($el.length == 0)
             return;
         
+        $el .css({
+            display: 'block',
+            position: 'absolute',
+            top:  $el .offset() .top,
+            left: $el .offset() .left
+        });
+        
         var vars = {
             el: $el,
             height: $el.height
@@ -45,9 +52,10 @@ jQuery.flow = (function() {
         
         // parent
         var $parent;
-        if (params.parent !== undefined)
+        if (params.parent !== undefined) {
             $parent = $(params.parent) .first();
-        else
+            $el .detach() .appendTo($parent);
+        } else
             $parent = $el .parent();
         vars.parent = $parent;
         
@@ -69,12 +77,6 @@ jQuery.flow = (function() {
         vars.screenMargin = getInt(params.screenMargin, 0);
         vars.margin = getInt(params.margin, 0);
         
-        
-        $el .css({
-            display: 'block',
-            position: 'absolute',
-            top: $el .offset() .top
-        });
         
         els.push(vars);
     };
