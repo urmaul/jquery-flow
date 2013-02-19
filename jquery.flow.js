@@ -13,9 +13,10 @@ jQuery.fn.flow = (function() {
         if (params === undefined)
             params = {};
         
-        /*params = $.extend({
-            position: 'top'
-        }, params);*/
+        params = $.extend({
+            'screen-margin': 0,
+            margin: 0
+        }, params);
         
         if ($.inArray(params.position, ['top', 'center', 'bottom']) == -1)
             params.position = 'top';
@@ -26,6 +27,8 @@ jQuery.fn.flow = (function() {
             vars.parent = $el .parent();
         
         vars.position = params.position;
+        vars.screenMargin = params['screen-margin'];
+        vars.margin = params.margin;
         vars.height = $el .height();
         vars.parentTop = vars.parent .offset() .top;
         vars.parentBottom = vars.parentTop + vars.parent .height();
@@ -51,8 +54,8 @@ jQuery.fn.flow = (function() {
         for (var i=0; i < els.length; ++i) {
             var el = els[i];
             
-            var topEdge    = Math.max(screen.top, el.parentTop);
-            var bottomEdge = Math.min(screen.bottom, el.parentBottom);
+            var topEdge    = Math.max(screen.top + el.screenMargin, el.parentTop) + el.margin;
+            var bottomEdge = Math.min(screen.bottom - el.screenMargin, el.parentBottom) - el.margin;
             
             var newTop = topEdge;
             
@@ -61,7 +64,11 @@ jQuery.fn.flow = (function() {
                     newTop = topEdge;
                     break;
                 case 'center':
+                    topEdge    = Math.max(screen.top, el.parentTop) + el.margin;
+                    bottomEdge = Math.min(screen.bottom, el.parentBottom) - el.margin;
                     newTop = topEdge + ((bottomEdge - topEdge) - el.height)/2;
+                    newTop = Math.max(newTop, screen.top + el.screenMargin);
+                    newTop = Math.min(newTop, screen.bottom - el.screenMargin - el.height);
                     break;
                 case 'bottom':
                     newTop = bottomEdge - el.height;
@@ -69,7 +76,7 @@ jQuery.fn.flow = (function() {
             }
             
             newTop = Math.min(newTop, bottomEdge - el.height);
-            newTop = Math.max(newTop, el.parentTop);
+            newTop = Math.max(newTop, el.parentTop + el.margin);
             
             el.el.css({top: newTop});
         }
