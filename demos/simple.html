@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Simple flow demo</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script>
+        <script type="text/javascript" src="../jquery.flow.js"></script>
+        <style>
+            #wrap {
+                margin: 1500px 10px 1500px;
+                height: 3000px;
+                background-image: linear-gradient(bottom, rgb(168,168,168) 0%, rgb(115,115,115) 50%);
+                background-image: -o-linear-gradient(bottom, rgb(168,168,168) 0%, rgb(115,115,115) 50%);
+                background-image: -moz-linear-gradient(bottom, rgb(168,168,168) 0%, rgb(115,115,115) 50%);
+                background-image: -webkit-linear-gradient(bottom, rgb(168,168,168) 0%, rgb(115,115,115) 50%);
+                background-image: -ms-linear-gradient(bottom, rgb(168,168,168) 0%, rgb(115,115,115) 50%);
+
+                background-image: -webkit-gradient(
+                    linear,
+                    left bottom,
+                    left top,
+                    color-stop(0, rgb(168,168,168)),
+                    color-stop(0.5, rgb(115,115,115))
+                );
+            }
+            
+            #flow1, #flow2, #flow3,
+            #flow4, #flow5, #flow6{
+                width: 150px;
+                height: 150px;
+                text-align: center;
+                line-height: 150px;
+                font-size: 20px;
+                background: #f66;
+            }
+            
+            #flow1 {
+                margin-left: 20px;
+            }
+            #flow2 {
+                margin-left: 220px;
+            }
+            #flow3 {
+                margin-left: 420px;
+            }
+            #flow4 {
+                margin-left: 620px;
+            }
+            #flow5 {
+                margin-left: 820px;
+            }
+            #flow6 {
+                margin-left: 1020px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Scroll Down</h1>
+        <div id="wrap">
+            <div id="flow1" data-flow="">Sample 1</div>
+            <div id="flow2" data-flow="position=center">Sample 2</div>
+            <div id="flow3" data-flow="position=bottom">Sample 3</div>
+        </div>
+        <div id="flow4" data-flow="position=top">Sample 4</div>
+        <div id="flow5" data-flow="position=center">Sample 5</div>
+        <div id="flow6" data-flow="position=bottom">Sample 6</div>
+    </body>
+</html>
