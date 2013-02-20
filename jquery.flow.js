@@ -55,10 +55,10 @@ jQuery.flow = (function() {
         var $parent;
         if (params.parent !== undefined) {
             $parent = $(params.parent) .first();
-            $el .detach() .appendTo($parent);
         } else
             $parent = $el .parent();
         vars.parent = $parent;
+        $el .detach() .appendTo($('body'));
         
         // sizes
         var onResizeElement = function() {
