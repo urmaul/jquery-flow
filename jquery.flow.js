@@ -38,11 +38,6 @@ jQuery.flow = (function() {
         if (params === undefined)
             params = {};
         
-        params = $.extend({
-            screenMargin: 0,
-            margin: 0
-        }, params);
-        
         // position
         if ($.inArray(params.position, ['top', 'center', 'bottom']) == -1)
             params.position = 'top';
