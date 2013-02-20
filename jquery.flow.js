@@ -25,9 +25,9 @@ jQuery.flow = (function() {
         $el .css({
             display: 'block',
             position: 'absolute',
-            top:  $el .offset() .top,
-            left: $el .offset() .left,
-            marginLeft: 0
+            top:  $el .offset() .top//,
+            //left: $el .offset() .left,
+            //marginLeft: 0
         });
         
         var vars = {
