@@ -1,6 +1,6 @@
 # jQuery Flow plugin
 
-Flow plugin makes your elements floating.
+With Flow plugin your elements become floating. See the [demos](http://urmaul.github.com/jquery-flow/demos/).
 
 ## Parameters
 
