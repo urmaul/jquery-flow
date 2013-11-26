@@ -84,8 +84,6 @@ jQuery.flow = (function() {
         vars.screenMargin = getInt(params.screenMargin, 0);
         vars.margin = getInt(params.margin, 0);
         
-        console.log(vars);
-        
         els.push(vars);
     };
     
