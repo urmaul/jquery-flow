@@ -15,3 +15,4 @@ With Flow plugin your elements become floating. See the [demos](http://urmaul.gi
 * **screenMargin** - mininum distance between element and screen edges. Integer. Default value is 0.
 * **minTop** - minimum distance between element top edge and document body top edge. Integer. Default value is 0. Value can be "current" - element current top position will be used as minTop.
 * **parent** - jquery selector for parent element. Element will float inside this element. Default value is current element parent.
+* **until** - jquery selector for bottom border element. Element will float until this element. Default value is null.
