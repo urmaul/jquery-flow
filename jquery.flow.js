@@ -67,7 +67,7 @@ jQuery.flow = (function() {
             if ($until)
 				vars.parentBottom = $until .offset() .top;
             else
-				vars.parentBottom = vars.parentTop + $parent .height();
+				vars.parentBottom = vars.parentTop + $parent .height() - parseInt($parent.css('margin-bottom'));
             
             vars.parentHeight = vars.parentBottom - vars.parentTop;
         };
@@ -76,6 +76,8 @@ jQuery.flow = (function() {
         
         $el     .resize(onResizeElement);
         $parent .resize(onResizeParent);
+        if ($until)
+			$until .resize(onResizeParent);
         
         // offsetTop
         vars.offsetTop = $el.offset().top - vars.parentTop;
