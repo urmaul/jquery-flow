@@ -24,10 +24,8 @@ jQuery.flow = (function() {
         
         $el .css({
             display: 'block',
-            position: 'absolute',
-            top:  $el .offset() .top,
-            left: $el .offset() .left,
-            marginLeft: 0
+            position: 'relative',
+            top:  0
         });
         
         var vars = {
@@ -53,7 +51,6 @@ jQuery.flow = (function() {
         } else
             $parent = $el .parent();
         vars.parent = $parent;
-        $el .detach() .appendTo($('body'));
         
         // sizes
         var onResizeElement = function() {
@@ -61,7 +58,8 @@ jQuery.flow = (function() {
         };
         var onResizeParent = function() {
             vars.parentTop = $parent .offset() .top;
-            vars.parentBottom = vars.parentTop + $parent .height();
+            vars.parentHeight = $parent .height();
+            vars.parentBottom = vars.parentTop + vars.parentHeight;
         };
         onResizeElement();
         onResizeParent();
@@ -69,10 +67,11 @@ jQuery.flow = (function() {
         $el     .resize(onResizeElement);
         $parent .resize(onResizeParent);
         
+        vars.offsetTop = $el.offset().top - vars.parentTop;
+        
         // margins
         vars.screenMargin = getInt(params.screenMargin, 0);
         vars.margin = getInt(params.margin, 0);
-        
         
         els.push(vars);
     };
@@ -81,7 +80,7 @@ jQuery.flow = (function() {
         var $window = $(window);
         
         var screen = {
-            top:    $window .scrollTop(),
+            top: $window .scrollTop(),
             height: $window .height()
         };
         screen.bottom = screen.top + screen.height;
@@ -89,7 +88,7 @@ jQuery.flow = (function() {
         for (var i=0; i < els.length; ++i) {
             var el = els[i];
             
-            var topEdge    = Math.max(screen.top + el.screenMargin, el.parentTop) + el.margin;
+            var topEdge = Math.max(screen.top + el.screenMargin, el.parentTop) + el.margin;
             var bottomEdge = Math.min(screen.bottom - el.screenMargin, el.parentBottom) - el.margin;
             
             var newTop = topEdge;
@@ -99,7 +98,7 @@ jQuery.flow = (function() {
                     newTop = topEdge;
                     break;
                 case 'center':
-                    topEdge    = Math.max(screen.top, el.parentTop) + el.margin;
+                    topEdge = Math.max(screen.top, el.parentTop) + el.margin;
                     bottomEdge = Math.min(screen.bottom, el.parentBottom) - el.margin;
                     newTop = topEdge + ((bottomEdge - topEdge) - el.height)/2;
                     newTop = Math.max(newTop, screen.top + el.screenMargin);
@@ -113,7 +112,7 @@ jQuery.flow = (function() {
             newTop = Math.min(newTop, bottomEdge - el.height);
             newTop = Math.max(newTop, el.parentTop + el.margin, el.minTop);
             
-            el.el.css({top: newTop});
+            el.el.css({top: newTop - el.parentTop - el.offsetTop});
         }
     };
     
