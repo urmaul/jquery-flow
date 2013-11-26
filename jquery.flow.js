@@ -17,7 +17,7 @@ jQuery.flow = (function() {
     };
     
     var addElement = function (el, params) {
-        var $el = el instanceof jQuery ? el : $(el);
+		var $el = el instanceof jQuery ? el : $(el);
         
         if ($el.length == 0)
             return;
@@ -42,7 +42,7 @@ jQuery.flow = (function() {
         vars.position = params.position;
         
         // minTop
-        vars.minTop = getInt(params.minTop, 0, {current: $el .offset() .top});
+        vars.minTop = getInt(params.minTop, 0, {current: $el.offset().top});
         
         // parent
         var $parent;
@@ -52,14 +52,24 @@ jQuery.flow = (function() {
             $parent = $el .parent();
         vars.parent = $parent;
         
+        // until
+        var $until = null;
+        if ($(params.until).length > 0)
+			$until = $(params.until);
+        
         // sizes
         var onResizeElement = function() {
             vars.height = $el .height();
         };
         var onResizeParent = function() {
             vars.parentTop = $parent .offset() .top;
-            vars.parentHeight = $parent .height();
-            vars.parentBottom = vars.parentTop + vars.parentHeight;
+            
+            if ($until)
+				vars.parentBottom = $until .offset() .top;
+            else
+				vars.parentBottom = vars.parentTop + $parent .height();
+            
+            vars.parentHeight = vars.parentBottom - vars.parentTop;
         };
         onResizeElement();
         onResizeParent();
@@ -67,11 +77,14 @@ jQuery.flow = (function() {
         $el     .resize(onResizeElement);
         $parent .resize(onResizeParent);
         
+        // offsetTop
         vars.offsetTop = $el.offset().top - vars.parentTop;
         
         // margins
         vars.screenMargin = getInt(params.screenMargin, 0);
         vars.margin = getInt(params.margin, 0);
+        
+        console.log(vars);
         
         els.push(vars);
     };
