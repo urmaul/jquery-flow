@@ -2,6 +2,12 @@
 
 With Flow plugin your elements become floating. See the [demos](http://urmaul.github.com/jquery-flow/demos/).
 
+## Adding
+
+```html
+<script type="text/javascript" src="http://urmaul.github.io/jquery-flow/jquery.flow.js"></script>
+```
+
 ## Parameters
 
 * **position** - floating element position. Possible values: top, center, bottom. Default value is "top".
